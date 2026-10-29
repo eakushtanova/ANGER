@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Neutral Face';
+    src: url('../fonts/NeutralFace.otf') format('opentype');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../fonts/OpenSans.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}

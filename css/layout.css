@@ -1,0 +1,1107 @@
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    background-color: #FAFAF6;   /* цвет фона в отступах между блоками */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* ничего не вылезает за ширину экрана (без горизонтальной прокрутки) */
+html,
+body {
+    overflow-x: clip;
+}
+
+.hero {
+    position: relative;
+    background-color: #FAFAF6;
+    height: var(--hero-h);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* фон первых двух блоков — одна общая фотография (см. «ОБЩИЙ ФОН» ниже) */
+    background-image: url('../images/face-full.jpg');
+    background-repeat: no-repeat;
+    background-size: var(--face-w) auto;
+    background-position: center var(--face-y);
+}
+.redrectangle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #CF0206;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    mix-blend-mode: hard-light;
+}
+.enemy {
+    position: relative;
+    font-family: 'Neutral Face';
+    font-weight: 400;
+    font-size: 4.1vw;
+    text-align: center;
+    color: #FAFAF6;
+    line-height: 107.4%;
+    justify-content: center;
+    z-index: 1;
+}
+.subtitle {
+    position: relative;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 1.25vw;
+    text-align: center;
+    color: #FAFAF6;
+    margin-top: 2vh;   /* такой же отступ, как у подзаголовка в последнем блоке */
+    z-index: 1;
+}
+.heroarrow {
+    position: absolute;
+    bottom: 7.6vh;
+    z-index: 1;
+    height: 2.8vh;
+    cursor: pointer;
+    transition: opacity 0.4s ease;
+}
+
+.heroarrow img {
+    display: block;
+    height: 100%;
+    animation: arrow-bounce 1.8s ease-in-out infinite;
+}
+
+/* стрелка мягко «зовёт» вниз: опускается и чуть гаснет, потом возвращается */
+@keyframes arrow-bounce {
+    0%, 100% { transform: translateY(0);    opacity: 1; }
+    50%      { transform: translateY(1.2vh); opacity: 0.45; }
+}
+
+/* после начала скролла стрелка исчезает — подсказка больше не нужна */
+.heroarrow.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* если в системе отключены анимации — стрелка просто стоит */
+@media (prefers-reduced-motion: reduce) {
+    .heroarrow img {
+        animation: none;
+    }
+}
+.second {
+    position: relative;
+    background-color: #FAFAF6;
+    padding-left: 3.5vw;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: var(--second-h);
+    background-image: url('../images/face-full.jpg');
+    background-repeat: no-repeat;
+    background-size: var(--face-w) auto;
+    /* та же картинка, сдвинутая вверх на высоту первого блока — продолжение без шва */
+    background-position: center calc(var(--face-y) - var(--hero-h));
+    overflow: hidden;
+}
+.grayrectangle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background-color: rgba(122, 122, 122, 0.6);
+}
+.noise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.95'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+.culture {
+    position: relative;
+    font-family: 'Neutral Face';
+    margin-top: 8.5vh;
+    font-weight: 400;
+    font-size: 4.1vw;
+    color: #FAFAF6;
+    line-height: 107.4%;
+    justify-content: center;
+    z-index: 3;   /* текст всегда поверх летающих плашек */
+}
+.aboutanger {
+    position: relative;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 1.25vw;
+    color: #FAFAF6;
+    margin-top: 2.2vh;
+    z-index: 3;   /* текст всегда поверх летающих плашек */
+}
+.tags {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64.5vh;
+    z-index: 2;            /* выше серого слоя и шума, но ниже текста */
+}
+.tag {
+    position: absolute;
+    background: #E30308;
+    color: white;
+    padding: 1vw 4.3vw;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 1.5vw;
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.3s ease;
+    will-change: transform;
+    z-index: 1;
+}
+.third {
+    position: relative;
+    background-color: #FAFAF6;
+    height: 300vh;
+}
+
+.third-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;   /* сверху и снизу одинаковое пустое место */
+}
+
+.compas {
+    position: relative;
+    font-family: 'Neutral Face';
+    font-weight: 400;
+    font-size: 4.1vw;
+    text-align: center;
+    color: #363636;
+    line-height: 107.4%;
+    margin-top: 0;   /* содержимое блока центрируется по вертикали (см. .third-sticky) */
+    z-index: 1;
+    will-change: transform, opacity;
+}
+
+.eyes-spacer {
+    margin-top: 4.5vh;
+    height: 21.4vh;
+    aspect-ratio: 456 / 173;
+    flex-shrink: 0;
+}
+
+.eyes {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    will-change: clip-path;
+}
+
+.eyes img {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: auto;
+    display: block;
+    transform-origin: 50% 50%;
+    will-change: transform;
+}
+
+.eyes-blur {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background-color: rgba(122, 122, 122, 0.6);
+}
+
+.eyes-noise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    will-change: opacity;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.95'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+.redrectangle1 {
+    position: absolute;
+    inset: 0;
+    background-color: #CF0206;
+    mix-blend-mode: hard-light;
+    z-index: 1;
+    will-change: opacity;
+}
+
+.bademotion {
+    position: relative;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 1.25vw;
+    color: #363636;
+    margin-top: 4.6vh;
+    z-index: 1;
+    will-change: transform, opacity;
+}
+.eyes-text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3.5vw 3.5vw;
+    pointer-events: none;
+}
+
+.eyes-text h3 {
+    margin: 0;
+    font-family: 'Neutral Face';
+    font-weight: 400;
+    font-size: 4.1vw;
+    line-height: 107.4%;
+    color: #FAFAF6;
+    text-transform: uppercase;
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.eyes-text-bottom {
+    text-align: right;
+}
+.fourth {
+    position: relative;
+    background-color: #FAFAF6;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-left: 3.5vw;
+}
+.volume {
+    font-family: 'Neutral Face';
+    font-weight: 400;
+    font-size: 4.1vw;
+    margin-top: 7.3vh;
+    line-height: 107.4%;
+    color: #363636;
+    align-self: flex-start;
+}
+.forma {
+    position: relative;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 1.25vw;
+    color: #363636;
+    margin-top: 2.2vh;
+    z-index: 1;
+    align-self: flex-start;
+}
+
+.forma p {
+    margin: 0 0 2vh;
+}
+
+.forma p:last-child {
+    margin-bottom: 0;
+}
+
+.alone {
+    position: absolute;
+    right: 0;
+    top: 8vh;
+    /* ширина от ширины экрана (как сетка лиц в 6-м блоке), но не выше 73% высоты экрана */
+    --alone-w: min(44.3vw, 73vh * 879 / 815);
+    width: var(--alone-w);
+    height: auto;
+    aspect-ratio: 879 / 815;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.alone img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.swing {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #363636;
+    color: #fff;
+    font-family: 'Open Sans';
+    font-size: calc(var(--alone-w) * 0.0305);   /* плашки растут и уменьшаются вместе с картинкой */
+    padding: 1.1em 2.4em;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    will-change: transform;
+    visibility: hidden;
+    z-index: 2;
+}
+.five {
+    position: relative;
+    background-color: #FAFAF6;
+    height: 500vh;
+}
+.five-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.emotions {
+    position: relative;
+    height: 85.2vh;
+}
+
+.emo-img {
+    display: block;
+    height: 85.2vh;
+    width: auto;
+    opacity: 0;
+}
+
+.emo-img:not(:first-child) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.emo-img.active {
+    opacity: 1;
+}
+
+.redrectangle2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: 20.6vw;
+    height: 13.8vh;
+    background-color: #CF0206;
+    mix-blend-mode: hard-light;
+    z-index: 2;
+}
+
+.emo-texts {
+    position: absolute;
+    /* подпись начинается сразу за правым краем фото + отступ 2.5vw */
+    left: calc(50% + 85.2vh * 680 / 921 / 2 + 2.5vw);
+    right: 3.5vw;
+    top: 0;
+    bottom: 0;
+}
+
+.emo-text {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(calc(-50% + 30px));
+    pointer-events: none;
+}
+
+.emo-text.active {
+    opacity: 1;
+    transform: translateY(-50%);
+}
+
+.where {
+    margin: 0;
+    font-family: 'Neutral Face';
+    font-weight: 400;
+    font-size: 4.1vw;
+    line-height: 107.4%;
+    color: #363636;
+}
+
+.emo-text p {
+    margin: 2vh 0 0;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 1.25vw;
+    color: #363636;
+}
+.six {
+    position: relative;
+    background-color: #FAFAF6;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-left: 3.5vw;
+    overflow: hidden;
+}
+
+.recognize {
+    position: relative;
+    z-index: 1;
+    max-width: 50vw;
+}
+
+.recognize-title {
+    margin: 0;
+    font-family: 'Neutral Face';
+    font-weight: 400;
+    font-size: 4.1vw;
+    line-height: 107.4%;
+    color: #363636;
+    text-transform: uppercase;
+}
+
+.recognize-text {
+    margin: 3vh 0 0;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 1.25vw;
+    line-height: 150%;
+    color: #363636;
+    white-space: nowrap;
+}
+
+/* ===== сетка лиц ===== */
+.faces {
+    position: absolute;
+    right: 0;
+    /* отступ справа; поставь 0, если сетка прижата к краю */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44vw;
+    /* ширина сетки — высота посчитается сама */
+}
+
+.faces-grid {
+    --cols: 8;
+    --rows: 7;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    width: 100%;
+}
+
+.faces-grid img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+/* ===== красный квадрат ===== */
+.faces-mark {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #CF0206;
+    mix-blend-mode: hard-light;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.seven {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #CF0206;
+    /* пока видео грузится, будет красный, а не белый */
+}
+
+/* видео на весь экран */
+.seven-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* заполняет экран без искажений, края обрезаются */
+    object-position: center 30%;
+    /* какую часть лица держать в кадре */
+    z-index: 0;
+}
+
+/* красное наложение — как у глаз */
+.redrectangle3 {
+    position: absolute;
+    inset: 0;
+    background-color: #CF0206;
+    mix-blend-mode: hard-light;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* шум — твой же SVG */
+.seven-noise {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.95'/%3E%3C/svg%3E");
+    background-size: 256px;
+    mix-blend-mode: multiply;
+    opacity: 0.35;
+    pointer-events: none;
+}
+.seven-text {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 3;
+    text-align: center;
+    color: #fff;
+}
+
+.seven-title {
+    margin: 0;
+    font-family: 'Neutral Face';
+    font-weight: 400;
+    font-size: 4.1vw;
+    line-height: 107.4%;
+    text-transform: uppercase;
+}
+
+.seven-sub {
+    margin: 2vh 0 0;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 1.25vw;
+}
+
+
+/* =====================================================================
+   НАБОРНЫЕ КОЛОНКИ
+   Текст переносится сам внутри колонки заданной ширины (без ручных <br>).
+   Ширина в em — она растёт и уменьшается вместе с размером шрифта.
+   text-wrap: pretty выравнивает длину строк и не оставляет
+   одно слово на последней строке.
+   ===================================================================== */
+.aboutanger p,
+.bademotion p,
+.forma p,
+.emo-text p,
+.recognize-text,
+.subtitle p,
+.seven-sub {
+    text-wrap: pretty;
+    line-height: 145%;
+}
+
+.aboutanger p   { max-width: 27em; }   /* ≈ 34vw на десктопе */
+/* текст про компас набран вручную: важно количество строк, поэтому переносы только по <br> */
+.bademotion p   { white-space: nowrap; }
+.forma          { max-width: min(37em, calc(89.5vw - min(44.3vw, 73vh * 879 / 815))); }   /* ≈ 46vw; всегда заканчивается за 7vw до картинки */
+.volume         { max-width: calc(89.5vw - min(44.3vw, 73vh * 879 / 815)); }
+.recognize-text { max-width: 34em; white-space: normal; }   /* ≈ 42vw */
+
+.emo-text p {
+    width: 16em;                        /* ≈ 20vw — одинаковая колонка у всех эмоций */
+    white-space: normal;
+}
+
+
+/* =====================================================================
+   ОБЩИЙ ФОН ПЕРВЫХ ДВУХ БЛОКОВ
+   images/face-full.jpg (1921×1779) — верх и низ одной фотографии.
+   Оба блока показывают её в одном масштабе, второй — со сдвигом на высоту первого,
+   поэтому шов совпадает на любом экране. Картинка закрывает оба блока целиком
+   (как background-size: cover для их общей площади) и центрируется по ней.
+   ===================================================================== */
+:root {
+    --hero-h: 100vh;      /* высота первого блока */
+    --second-h: 64.5vh;   /* высота второго блока */
+    --face-w: max(100vw, calc((var(--hero-h) + var(--second-h)) * 1921 / 1779));
+    --face-y: calc((var(--hero-h) + var(--second-h) - var(--face-w) * 1779 / 1921) / 2);
+}
+
+
+/* =====================================================================
+   ВОЗДУХ МЕЖДУ БЛОКАМИ
+   Первые два блока (красный экран и «Гнев — самая стыдная эмоция») идут вплотную.
+   Между остальными видимый промежуток (от содержимого одного блока до содержимого
+   следующего) одинаковый. Его выставляет скрипт в конце script.js по этому значению.
+   ===================================================================== */
+:root {
+    --visual-gap: 21vh;   /* размер видимого промежутка между блоками — меняй здесь */
+}
+
+/* белые блоки прозрачные (цвет фона даёт body), чтобы при подгонке отступов
+   пустые края одного блока не закрывали соседний */
+.third,
+.fourth,
+.five,
+.six {
+    background-color: transparent;
+}
+
+/* в этих блоках нет ничего кликабельного — пусть не перехватывают курсор у соседей */
+.third,
+.five,
+.six,
+.seven {
+    pointer-events: none;
+}
+
+
+/* =====================================================================
+   КУРСОР «ЗАКИПАЮЩАЯ ТОЧКА»
+   Тёмная точка. Чем резче движение мыши — тем сильнее она краснеет и растёт,
+   остановишься — «остывает».
+   Работает только там, где есть мышь (на телефонах и планшетах курсора нет).
+   ===================================================================== */
+.anger-cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    /* точка нарисована в максимальном размере и уменьшается скриптом:
+       если рисовать маленькую и увеличивать, края получаются мыльными */
+    width: 38px;
+    height: 38px;
+    margin: -19px 0 0 -19px;     /* центр точки — ровно на кончике мыши */
+    border-radius: 50%;
+    background-color: #363636;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    will-change: transform;
+}
+
+.anger-cursor.is-visible {
+    opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    /* системную стрелку прячем везде, её заменяет точка */
+    html.has-anger-cursor,
+    html.has-anger-cursor * {
+        cursor: none !important;
+    }
+}
+
+
+/* слова через дефис («что-то», «из-за») не разрываются по строкам */
+.nobr {
+    white-space: nowrap;
+}
+
+/* перенос, который нужен только на телефоне */
+.br-mob {
+    display: none;
+}
+
+
+/* =====================================================================
+   АДАПТИВ
+   Всё, что выше, — десктопная версия (как в макете).
+   Ниже — правки для ноутбуков, планшетов и телефонов.
+   ===================================================================== */
+
+/* ---------- ноутбуки и планшеты горизонтально: 901–1280 px ---------- */
+@media (max-width: 1280px) and (min-width: 901px) {
+
+    /* мелкий текст не меньше 14px, чтобы его можно было читать */
+    .aboutanger,
+    .bademotion,
+    .forma,
+    .emo-text p,
+    .recognize-text {
+        font-size: max(1.25vw, 14px);
+    }
+
+    .subtitle,
+    .seven-sub {
+        font-size: max(1.25vw, 14px);
+    }
+
+    /* в блоке «Подавление гнева» картинка чуть меньше, текст переносится сам и не заезжает на неё */
+    .alone {
+        --alone-w: calc(min(60vh, 46vw) * 879 / 815);
+        height: min(60vh, 46vw);
+        width: auto;
+        aspect-ratio: 879 / 815;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .fourth {
+        justify-content: center;
+    }
+
+    .volume {
+        margin-top: 0;
+    }
+
+    .volume,
+    .forma {
+        max-width: calc(100vw - min(60vh, 46vw) * 879 / 815 - 7vw);
+    }
+
+    .forma br {
+        display: none;
+    }
+
+    /* эмоции: подпись всегда справа от фото, а не поверх него */
+    .emo-texts {
+        left: calc(50% + 85.2vh * 680 / 921 / 2 + 2.5vw);
+        width: auto;
+        right: 3.5vw;
+    }
+
+    .emo-text {
+        left: 0;
+        right: 0;
+        white-space: normal;
+    }
+
+    .emo-text p br {
+        display: none;
+    }
+
+    .recognize {
+        max-width: calc(100vw - 44vw - 7vw);
+    }
+
+    .recognize-text {
+        white-space: normal;
+    }
+
+    .recognize-text br {
+        display: none;
+    }
+}
+
+
+/* ---------- планшеты вертикально и телефоны: до 900 px ---------- */
+@media (max-width: 900px) {
+
+    :root {
+        --visual-gap: 13vh;
+        --hero-h: 100svh;
+        --second-h: 100svh;
+    }
+
+    /* ручные переносы в обычном тексте отключаем — он переносится по ширине экрана */
+    .subtitle br,
+    .aboutanger br,
+    .bademotion br,
+    .forma br,
+    .emo-text p br,
+    .recognize-text br,
+    .eyes-text br {
+        display: none;
+    }
+
+    /* общие размеры шрифтов */
+    .enemy,
+    .culture,
+    .compas,
+    .volume,
+    .where,
+    .recognize-title,
+    .seven-title {
+        font-size: clamp(30px, 8.6vw, 64px);
+    }
+
+    .subtitle,
+    .aboutanger,
+    .bademotion,
+    .forma,
+    .emo-text p,
+    .recognize-text,
+    .seven-sub {
+        font-size: clamp(15px, 4vw, 20px);
+        line-height: 145%;
+        white-space: normal;
+    }
+
+    /* ===== 1. первый экран ===== */
+    .hero {
+        height: 100svh;
+        padding: 0 6vw;
+        /* на телефоне — отдельная вертикальная фотография */
+        background-image: url("../images/face mob.png");
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* красное наложение — на весь блок поверх мобильной фотографии */
+    .redrectangle {
+        inset: 0;
+        width: auto;
+        height: auto;
+    }
+
+    .subtitle {
+        margin-top: 2vh;
+    }
+
+    .heroarrow {
+        height: 2.2vh;
+    }
+
+    /* ===== 2. «Гнев — самая стыдная эмоция»: текст сверху, плашки падают в нижнюю часть ===== */
+    .second {
+        height: 100svh;
+        padding: 0 6vw;
+        /* на телефоне — своя фотография; лежит под серым блюром и шумом */
+        background-image: url("../images/second mob.png");
+        background-size: cover;
+        background-position: center;
+    }
+
+    .culture {
+        margin-top: 9vh;
+        width: min-content;   /* каждое слово на своей строке (слова, связанные неразрывным пробелом, — вместе) */
+    }
+
+    .aboutanger p {
+        max-width: 18.5em;    /* ширина колонки подобрана под ровные строки на телефонах */
+    }
+
+    .forma p {
+        max-width: 21em;      /* «Подавление гнева»: ширина под ровные строки на телефонах */
+    }
+
+    /* заголовок «Подавление гнева…»: свои переносы на телефоне */
+    .br-desk {
+        display: none;
+    }
+
+    .volume br.br-mob {
+        display: inline;
+    }
+
+    .seven-sub br.br-mob {
+        display: inline;      /* «а понимать, о чём он» — с новой строки */
+    }
+
+    .aboutanger br.br-mob {
+        display: inline;      /* «которые нас разрушают» — с новой строки */
+    }
+
+    .aboutanger {
+        margin-top: 2vh;
+        max-width: 34em;
+    }
+
+    .tags {
+        height: 100%;
+    }
+
+    .tag {
+        font-size: clamp(13px, 3.6vw, 17px);
+        padding: 0.7em 1.6em;
+    }
+
+    /* ===== 3. глаза / компас ===== */
+    .third-sticky {
+        height: 100svh;
+        justify-content: center;
+        padding: 0 6vw;
+    }
+
+    .compas {
+        margin-top: 0;
+    }
+
+    .eyes-spacer {
+        width: 88vw;
+        height: auto;
+        aspect-ratio: 550 / 209;
+        margin-top: 4vh;
+    }
+
+    .bademotion p {
+        white-space: normal;   /* на телефоне 7 строк не влезут — текст переносится сам */
+    }
+
+    .bademotion {
+        margin-top: 4vh;
+        max-width: 34em;
+    }
+
+    .eyes-text {
+        padding: 6vw;
+    }
+
+    .eyes-text h3 {
+        font-size: clamp(22px, 6.4vw, 44px);
+    }
+
+    /* ===== 4. «Подавление гнева»: картинка уходит под текст ===== */
+    .fourth {
+        height: auto;
+        padding: 10vh 6vw 0;
+    }
+
+    .volume {
+        margin-top: 0;
+        max-width: none;   /* на телефоне картинка под текстом — ограничение ширины не нужно */
+    }
+
+    .forma {
+        margin-top: 2.5vh;
+        max-width: 34em;
+    }
+
+    .forma p {
+        margin-bottom: 1.6vh;
+    }
+
+    .alone {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100vw;
+        height: auto;
+        aspect-ratio: 879 / 815;
+        margin: 5vh 0 0 -6vw;
+    }
+
+    .swing {
+        font-size: clamp(12px, 3.4vw, 22px);
+    }
+
+    /* ===== 5. эмоции девушки: фото сверху, подпись под ним ===== */
+    .five-sticky {
+        height: 100svh;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 6vw;
+    }
+
+    /* ширина фото — она же ширина колонки подписи под ним */
+    .five {
+        --emo-w: min(56svh * 680 / 921, 88vw);
+    }
+
+    .emotions {
+        width: var(--emo-w);
+        height: auto;
+        aspect-ratio: 680 / 921;
+    }
+
+    .emo-img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    /* красная полоса — в процентах от фото, чтобы лежать на глазах при любом размере */
+    .redrectangle2 {
+        width: 58%;
+        height: 16.2%;
+    }
+
+    .emo-texts {
+        position: relative;
+        left: auto;
+        top: auto;
+        bottom: auto;
+        right: auto;           /* на десктопе тут отступ справа — на телефоне он сдвигал колонку */
+        width: var(--emo-w);   /* колонка ровно по ширине фото */
+        height: 26svh;
+    }
+
+    /* подпись — по левому краю фото, на одинаковом расстоянии под ним */
+    .emo-text {
+        left: 0;
+        right: 0;
+        top: 3vh;
+        text-align: left;
+        white-space: normal;
+    }
+
+    .emo-text p {
+        margin: 1.2vh 0 0;
+        width: auto;
+        max-width: none;
+    }
+
+    /* ===== 6. «Как распознать»: заголовок → сетка лиц во всю ширину → текст ===== */
+    .six {
+        height: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10vh 6vw 0;
+        overflow: visible;
+    }
+
+    /* обёртку «растворяем», чтобы заголовок, сетка и текст стали в один ряд и их можно было переставить */
+    .recognize {
+        display: contents;
+    }
+
+    .recognize-title { order: 1; }
+    .faces           { order: 2; }
+    .recognize-text  { order: 3; }
+
+    .recognize-text {
+        margin-top: 4vh;
+        max-width: 21em;   /* та же ширина колонки, что в «Подавлении гнева» — ровные строки */
+    }
+
+    .faces {
+        position: relative;
+        top: auto;
+        right: auto;
+        transform: none;
+        width: 100vw;
+        margin: 4vh 0 0 -6vw;
+    }
+
+    .faces-grid {
+        --cols: 6;
+        --rows: 3;       /* таблица в 3 строки */
+    }
+
+    /* ===== 7. финал с видео ===== */
+    .seven {
+        height: 100svh;
+    }
+
+    .seven-video {
+        object-position: 50% 30%;
+    }
+
+    .seven-text {
+        padding: 0 6vw;
+    }
+
+    .seven-sub {
+        margin-top: 2vh;
+    }
+}
