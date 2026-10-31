@@ -783,3 +783,33 @@ document.fonts.ready.then(() => {   // ждём шрифты, иначе раз�
   }
   tick();
 })();
+
+
+// ===== финальное видео: запуск на iPhone =====
+// В режиме энергосбережения Safari не даёт видео стартовать само.
+// Тогда запускаем его при первом касании или прокрутке, а пока секции не видно — ставим на паузу.
+(() => {
+  const video = document.querySelector('.seven-video');
+  if (!video) return;
+  video.muted = true;           // без звука браузеры разрешают автозапуск
+  video.playsInline = true;
+
+  const tryPlay = () => { const p = video.play(); if (p) p.catch(() => {}); };
+
+  let visible = false;
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible) tryPlay(); else video.pause();
+  }).observe(video);
+
+  // первое действие пользователя «разблокирует» видео
+  const unlock = () => {
+    tryPlay();
+    if (!visible) video.pause();
+    if (!video.paused || visible) {
+      ['touchstart', 'pointerdown', 'scroll'].forEach(ev => window.removeEventListener(ev, unlock));
+    }
+  };
+  ['touchstart', 'pointerdown', 'scroll'].forEach(ev =>
+    window.addEventListener(ev, unlock, { passive: true }));
+})();
