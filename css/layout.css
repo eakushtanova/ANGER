@@ -54,7 +54,7 @@ body {
     position: relative;
     font-family: 'Open Sans';
     font-weight: 400;
-    font-size: 1.25vw;
+    font-size: 1.5vw;
     text-align: center;
     color: #FAFAF6;
     margin-top: 2vh;   /* такой же отступ, как у подзаголовка в последнем блоке */
@@ -301,7 +301,7 @@ body {
     background-color: #FAFAF6;
     height: 100vh;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;   /* текст по центру блока по вертикали, как в «Как распознать» */
     flex-direction: column;
     padding-left: 3.5vw;
 }
@@ -309,7 +309,7 @@ body {
     font-family: 'Neutral Face';
     font-weight: 400;
     font-size: 4.1vw;
-    margin-top: 7.3vh;
+    margin-top: 0;
     line-height: 107.4%;
     color: #363636;
     align-self: flex-start;
@@ -335,8 +335,9 @@ body {
 
 .alone {
     position: absolute;
-    right: 0;
-    top: 8vh;
+    right: 3.5vw;                  /* такой же отступ, как у текста слева */
+    top: 50%;
+    transform: translateY(-50%);   /* по центру блока по вертикали */
     /* ширина от ширины экрана (как сетка лиц в 6-м блоке), но не выше 73% высоты экрана */
     --alone-w: min(44.3vw, 73vh * 879 / 815);
     width: var(--alone-w);
@@ -471,7 +472,7 @@ body {
 .recognize {
     position: relative;
     z-index: 1;
-    max-width: 50vw;
+    max-width: 42vw;   /* 100vw − сетка 44vw − отступы 3.5vw по краям − 7vw воздуха */
 }
 
 .recognize-title {
@@ -497,8 +498,7 @@ body {
 /* ===== сетка лиц ===== */
 .faces {
     position: absolute;
-    right: 0;
-    /* отступ справа; поставь 0, если сетка прижата к краю */
+    right: 3.5vw;   /* такой же отступ, как у текста слева */
     top: 50%;
     transform: translateY(-50%);
     width: 44vw;
@@ -552,6 +552,13 @@ body {
     z-index: 0;
 }
 
+/* прячем системную кнопку «Play», которую iPhone рисует поверх видео, если автозапуск запрещён */
+.seven-video::-webkit-media-controls-start-playback-button,
+.seven-video::-webkit-media-controls {
+    display: none !important;
+    -webkit-appearance: none;
+}
+
 /* красное наложение — как у глаз */
 .redrectangle3 {
     position: absolute;
@@ -597,7 +604,7 @@ body {
     margin: 2vh 0 0;
     font-family: 'Open Sans';
     font-weight: 400;
-    font-size: 1.25vw;
+    font-size: 1.5vw;
 }
 
 
@@ -622,8 +629,8 @@ body {
 .aboutanger p   { max-width: 27em; }   /* ≈ 34vw на десктопе */
 /* текст про компас набран вручную: важно количество строк, поэтому переносы только по <br> */
 .bademotion p   { white-space: nowrap; }
-.forma          { max-width: min(37em, calc(89.5vw - min(44.3vw, 73vh * 879 / 815))); }   /* ≈ 46vw; всегда заканчивается за 7vw до картинки */
-.volume         { max-width: calc(89.5vw - min(44.3vw, 73vh * 879 / 815)); }
+.forma          { max-width: min(37em, calc(86vw - min(44.3vw, 73vh * 879 / 815))); }   /* всегда заканчивается за 7vw до картинки */
+.volume         { white-space: nowrap; }   /* заголовок набран вручную — переносы только по <br> */
 .recognize-text { max-width: 34em; white-space: normal; }   /* ≈ 42vw */
 
 .emo-text p {
@@ -743,13 +750,13 @@ body {
 
     .subtitle,
     .seven-sub {
-        font-size: max(1.25vw, 14px);
+        font-size: max(1.5vw, 16px);
     }
 
     /* в блоке «Подавление гнева» картинка чуть меньше, текст переносится сам и не заезжает на неё */
     .alone {
-        --alone-w: calc(min(60vh, 46vw) * 879 / 815);
-        height: min(60vh, 46vw);
+        --alone-w: calc(min(60vh, 40vw) * 879 / 815);
+        height: min(60vh, 40vw);
         width: auto;
         aspect-ratio: 879 / 815;
         top: 50%;
@@ -766,7 +773,7 @@ body {
 
     .volume,
     .forma {
-        max-width: calc(100vw - min(60vh, 46vw) * 879 / 815 - 7vw);
+        max-width: calc(100vw - min(60vh, 40vw) * 879 / 815 - 10.5vw);
     }
 
     .forma br {
@@ -791,7 +798,7 @@ body {
     }
 
     .recognize {
-        max-width: calc(100vw - 44vw - 7vw);
+        max-width: calc(100vw - 44vw - 14vw);
     }
 
     .recognize-text {
@@ -985,6 +992,7 @@ body {
         position: relative;
         top: auto;
         right: auto;
+        transform: none;
         width: 100vw;
         height: auto;
         aspect-ratio: 879 / 815;
